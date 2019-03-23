@@ -12,7 +12,11 @@ class WinCamD_LCM:
     #   data from the DataRay WinCamD-LCM
     
     def __init__(self):
+        # Measured centroid data as a pandas DataFrame
         self.centroid = None
+
+        # Information log
+        self.log = []
 
     
     
@@ -47,6 +51,7 @@ class WinCamD_LCM:
             self.centroid = pd.read_excel(file_path)
         except:
             print('FilePathError: invalid file path')
+            self.log.append('FilePathError: invalid file path')
 
         self.centroid.rename(index=str, columns={" Xc ": "Xc", " Yc ": "Yc"})
 
@@ -54,7 +59,14 @@ class WinCamD_LCM:
 
     # Check if the user has loaded centroid data
     def Check_For_Centroid_Data(self):
-        if not self.centroid:
+        try:
+            self.centroid == None
+        except:
+            # The user has loaded centroid data
+            self.log.append("Check for centroid data passed")
+        else:
+            # The user has not loaded centroid data
+            self.log.append("Requesting centroid data")
             self.Load_Centroid()
 
 
