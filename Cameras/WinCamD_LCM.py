@@ -50,8 +50,19 @@ class WinCamD_LCM:
 
         self.centroid.rename(index=str, columns={" Xc ": "Xc", " Yc ": "Yc"})
 
-        return self.centroid
+
+
+    # Check if the user has loaded centroid data
+    def Check_For_Centroid_Data(self):
+        if not self.centroid:
+            self.Load_Centroid()
 
 
 
+    # Plot centroid as a function of time
+    def Plot_Centroid(self):
+        self.Check_For_Centroid_Data()
 
+
+
+        pass
