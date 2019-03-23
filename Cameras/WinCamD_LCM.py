@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+# tkinter enables file browsing
 import tkinter as tk
 from tkinter import filedialog
 
@@ -11,7 +12,7 @@ class WinCamD_LCM:
     #   data from the DataRay WinCamD-LCM
     
     def __init__(self):
-        self.centroid
+        self.centroid = None
 
     
     
@@ -36,7 +37,7 @@ class WinCamD_LCM:
     
     # Load centroid measurement as a Pandas data frame
     # saved in centroid
-    def Load_Centroid_Measurement(self, file_path = False):
+    def Load_Centroid(self, file_path = False):
         # Get the file path of the centroid measurement
         if not file_path:
             # Prompt user to locate the file path
