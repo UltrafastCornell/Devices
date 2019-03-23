@@ -52,8 +52,9 @@ class WinCamD_LCM:
         except:
             print('FilePathError: invalid file path')
             self.log.append('FilePathError: invalid file path')
-
-        self.centroid.rename(index=str, columns={" Xc ": "Xc", " Yc ": "Yc"})
+        
+        # Get rid of spaces in column titles
+        self.centroid = self.centroid.rename(index=str, columns={" Xc ": "Xc", " Yc ": "Yc"})
 
 
 
@@ -75,6 +76,30 @@ class WinCamD_LCM:
     def Plot_Centroid(self):
         self.Check_For_Centroid_Data()
 
+        # Create new figure
+        fig = plt.figure()
+        ax = fig.add_axes([0, 0, 1, 1])
 
+        # Grab centroid X and Y coordinates
+        Xc = self.centroid["Xc"]
+        Yc = self.centroid["Yc"]
 
-        pass
+        # Set scatter plot color based on element index
+        color = self.centroid.index
+
+        # Generate scatter plot of centroid data
+        s = ax.scatter(x = Xc, y = Yc, c=color, cmap='Spectral')
+       
+        # Set default labels
+        ax.set_title('Beam Centroid')
+        ax.set_xlabel('$X_{c}$ $[\mu m]$')
+        ax.set_ylabel('$Y_{c}$ $[\mu m]$')
+
+        # Set axis below plotted data
+        ax.set_axisbelow(True)
+
+        # Create and label colorbar
+        cb = plt.colorbar(s)
+        cb.set_label('Time [s]')
+
+        return ax
