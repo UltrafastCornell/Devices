@@ -1,6 +1,14 @@
 # Import Camera base class
 from .Spectrometer import Spectrometer
 
+# Import packages for data analysis
+import numpy as np
+import pandas as pd
+
+# Import packages for plotting
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 class OceanOptics(Spectrometer):
     #   Helper functions for formatting and plotting
     #   data from Ocean Optics spectrometers

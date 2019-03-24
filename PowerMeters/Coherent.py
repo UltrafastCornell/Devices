@@ -1,6 +1,14 @@
 # Import Camera base class
 from .PowerMeter import PowerMeter
 
+# Import packages for data analysis
+import numpy as np
+import pandas as pd
+
+# Import packages for plotting
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 class Coherent(PowerMeter):
     #   Helper functions for formatting and plotting
     #   data from Coherent power meters

@@ -1,6 +1,14 @@
 # Import Camera base class
 from .Camera import Camera
 
+# Import packages for data analysis
+import numpy as np
+import pandas as pd
+
+# Import packages for plotting
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 class DataRay(Camera):
     """Helper functions for formatting and plotting
     data from DataRay cameras"""
@@ -13,14 +21,15 @@ class DataRay(Camera):
         self.centroid = None
 
 
-    
-    # Load centroid measurement as a Pandas data frame
-    # saved in centroid
+
     def Load_Centroid(self, file_path = False):
+        """Load centroid measurement as a Pandas data frame saved in centroid"""
+
         # Get the file path of the centroid measurement
         if not file_path:
             # Prompt user to locate the file path
             file_path = self._Get_File_Path()
+            print('Setting file path to: ', file_path)
 
         try:
             self.centroid = pd.read_excel(file_path)
