@@ -1,14 +1,6 @@
 # Import Camera base class
 from .Camera import Camera
 
-# Import packages for data analysis
-import numpy as np
-import pandas as pd
-
-# Import packages for plotting
-import matplotlib.pyplot as plt
-import seaborn as sns
-
 class DataRay(Camera):
     """Helper functions for formatting and plotting
     data from DataRay cameras"""

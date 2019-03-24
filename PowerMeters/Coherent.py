@@ -1,14 +1,6 @@
 # Import Camera base class
 from .PowerMeter import PowerMeter
 
-# Import packages for data analysis
-import numpy as np
-import pandas as pd
-
-# Import packages for plotting
-import matplotlib.pyplot as plt
-import seaborn as sns
-
 class Coherent(PowerMeter):
     #   Helper functions for formatting and plotting
     #   data from Coherent power meters
@@ -35,29 +27,4 @@ class Coherent(PowerMeter):
             pass
         except:
             print('FilePathError: invalid file path')
-<<<<<<< HEAD
             self.log.append('FilePathError: invalid file path')
-        
-
-
-    # Check if the user has loaded centroid data
-    def Check_For_Data(self):
-        try:
-            # data to check == None
-            pass
-        except:
-            # The user has loaded centroid data
-            self.log.append("Check for data passed")
-        else:
-            # The user has not loaded centroid data
-            self.log.append("Requesting data")
-            # Load function here
-
-
-
-    # Plot as a function of time
-    def Plot(self):
-        self.Check_For_Data()
-=======
-            self.log.append('FilePathError: invalid file path')
->>>>>>> bff4e1da8940225505536eb860ad721b23e21b5c
