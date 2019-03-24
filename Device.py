@@ -1,11 +1,3 @@
-# Import packages for data analysis
-import numpy as np
-import pandas as pd
-
-# Import packages for plotting
-import matplotlib.pyplot as plt
-import seaborn as sns
-
 # tkinter enables file browsing
 import tkinter as tk
 from tkinter import filedialog
