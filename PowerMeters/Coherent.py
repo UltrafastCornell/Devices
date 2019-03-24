@@ -49,6 +49,7 @@ class Coherent:
 
         try:
             #  = pd.read_excel(file_path)
+            pass
         except:
             print('FilePathError: invalid file path')
             self.log.append('FilePathError: invalid file path')
@@ -59,6 +60,7 @@ class Coherent:
     def Check_For_Data(self):
         try:
             # data to check == None
+            pass
         except:
             # The user has loaded centroid data
             self.log.append("Check for data passed")

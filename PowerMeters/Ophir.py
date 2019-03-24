@@ -13,7 +13,7 @@ class Ophir:
     
     def __init__(self):
         # Measured data as a pandas DataFrame
-        self.data = None
+        self.power = None
 
         # Information log
         self.log = []
@@ -41,14 +41,18 @@ class Ophir:
     
     # Load  measurement as a Pandas data frame
     # saved in 
-    def Load_Centroid(self, file_path = False):
+    def Load_Power(self, file_path = False):
+        """Load and plot specified power data."""
+        
         # Get the file path of the  measurement
         if not file_path:
             # Prompt user to locate the file path
             file_path = self._Get_File_Path()
 
         try:
+            # self.power = 
             #  = pd.read_excel(file_path)
+            pass
         except:
             print('FilePathError: invalid file path')
             self.log.append('FilePathError: invalid file path')
@@ -59,6 +63,7 @@ class Ophir:
     def Check_For_Data(self):
         try:
             # data to check == None
+            pass
         except:
             # The user has loaded centroid data
             self.log.append("Check for data passed")
