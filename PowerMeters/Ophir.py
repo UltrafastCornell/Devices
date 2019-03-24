@@ -1,41 +1,24 @@
+# Import Camera base class
+from .PowerMeter import PowerMeter
+
+# Import packages for data analysis
 import numpy as np
 import pandas as pd
+
+# Import packages for plotting
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# tkinter enables file browsing
-import tkinter as tk
-from tkinter import filedialog
-
-class Ophir:
+class Ophir(PowerMeter):
     #   Helper functions for formatting and plotting
     #   data from Ophir power meters
     
     def __init__(self):
+        # Initialize PowerMeter base class
+        PowerMeter.__init__(self)
+
         # Measured data as a pandas DataFrame
         self.power = None
-
-        # Information log
-        self.log = []
-
-    
-    
-    # Open dialogue box that prompts the user to 
-    # select a file path
-    def _Get_File_Path(self):
-        # Assign handel to tkinter root window
-        root = tk.Tk()
-
-        # Bring root window above other windows
-        root.attributes("-topmost", True)
-        
-        # String containing the file path
-        file_path = filedialog.askopenfilename()
-
-        # Destroy the root window
-        root.destroy()
-
-        return file_path
 
 
     
@@ -55,6 +38,7 @@ class Ophir:
             pass
         except:
             print('FilePathError: invalid file path')
+<<<<<<< HEAD
             self.log.append('FilePathError: invalid file path')
         
 
@@ -77,3 +61,6 @@ class Ophir:
     # Plot as a function of time
     def Plot(self):
         self.Check_For_Data()
+=======
+            self.log.append('FilePathError: invalid file path')      
+>>>>>>> bff4e1da8940225505536eb860ad721b23e21b5c
