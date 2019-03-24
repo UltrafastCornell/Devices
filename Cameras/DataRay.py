@@ -1,41 +1,24 @@
+# Import Camera base class
+from .Camera import Camera
+
+# Import packages for data analysis
 import numpy as np
 import pandas as pd
+
+# Import packages for plotting
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# tkinter enables file browsing
-import tkinter as tk
-from tkinter import filedialog
-
-class WinCamD_LCM:
-    #   Helper functions for formatting and plotting
-    #   data from the DataRay WinCamD-LCM
+class DataRay(Camera):
+    """Helper functions for formatting and plotting
+    data from DataRay cameras"""
     
     def __init__(self):
+        # Initialize camera base class
+        Camera.__init__(self)
+        
         # Measured centroid data as a pandas DataFrame
         self.centroid = None
-
-        # Information log
-        self.log = []
-
-    
-    
-    # Open dialogue box that prompts the user to 
-    # select a file path
-    def _Get_File_Path(self):
-        # Assign handel to tkinter root window
-        root = tk.Tk()
-
-        # Bring root window above other windows
-        root.attributes("-topmost", True)
-        
-        # String containing the file path
-        file_path = filedialog.askopenfilename()
-
-        # Destroy the root window
-        root.destroy()
-
-        return file_path
 
 
     
@@ -58,23 +41,12 @@ class WinCamD_LCM:
 
 
 
-    # Check if the user has loaded centroid data
-    def Check_For_Centroid_Data(self):
-        try:
-            self.centroid == None
-        except:
-            # The user has loaded centroid data
-            self.log.append("Check for centroid data passed")
-        else:
-            # The user has not loaded centroid data
-            self.log.append("Requesting centroid data")
-            self.Load_Centroid()
-
-
-
-    # Plot centroid as a function of time
     def Plot_Centroid(self):
-        self.Check_For_Centroid_Data()
+        """Plot centroid as a function of time"""
+        
+        # Check if centroid data has been properly loaded
+        if not self._Is_Data_Loaded(self.centroid):
+            self.Load_Centroid()    
 
         # Create new figure
         fig = plt.figure()
