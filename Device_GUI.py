@@ -22,7 +22,6 @@
 
 
 
-print(__name__)
 import tkinter as tk
 
 class Device_GUI(tk.Frame):
@@ -57,7 +56,7 @@ class Device_GUI(tk.Frame):
         status = tk.Label(parent, text = "Nothing for now...", bd = 1, relief = "sunken", anchor = "w")
         status.pack(side = "bottom", fill = "x")
 
-if __name__: #== "__main__":
+if __name__ == "__main__":
     root = tk.Tk()
 
     # Title root
