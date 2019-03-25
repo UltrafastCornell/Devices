@@ -35,6 +35,10 @@ class Coherent(PowerMeter):
             pass
         except:
             print('FilePathError: invalid file path')
+<<<<<<< HEAD
 
             self.log.append('FilePathError: invalid file path')
 
+=======
+            self.log.append('FilePathError: invalid file path')
+>>>>>>> 32183d11fe792fc4f2ae58c9ae07c987fe48c32b

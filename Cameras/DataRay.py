@@ -21,10 +21,10 @@ class DataRay(Camera):
         self.centroid = None
 
 
-    
-    # Load centroid measurement as a Pandas data frame
-    # saved in centroid
+
     def Load_Centroid(self, file_path = False):
+        """Load centroid measurement as a Pandas data frame saved in centroid"""
+
         # Get the file path of the centroid measurement
         if not file_path:
             # Prompt user to locate the file path
@@ -40,6 +40,18 @@ class DataRay(Camera):
         self.centroid = self.centroid.rename(index=str, columns={" Xc ": "Xc", " Yc ": "Yc"})
 
 
+    
+    def Normalize_By_Radius(self, Xr, Yr):
+        """Normalize centroid measurement by the beam radius"""
+
+        # Check if centroid data has been properly loaded
+        if not self._Is_Data_Loaded(self.centroid):
+            self.Load_Centroid()    
+
+        self.centroid["Xc"] = self.centroid["Xc"]/Xr
+        self.centroid["Yc"] = self.centroid["Yc"]/Yr        
+
+
 
     def Plot_Centroid(self):
         """Plot centroid as a function of time"""
@@ -47,20 +59,20 @@ class DataRay(Camera):
         # Check if centroid data has been properly loaded
         if not self._Is_Data_Loaded(self.centroid):
             self.Load_Centroid()    
-
-        # Create new figure
-        fig = plt.figure()
-        ax = fig.add_axes([0, 0, 1, 1])
-
+        
         # Grab centroid X and Y coordinates
         Xc = self.centroid["Xc"]
         Yc = self.centroid["Yc"]
 
         # Set scatter plot color based on element index
         color = self.centroid.index
+           
+        # Create new figure
+        fig = plt.figure()
+        ax = fig.add_axes([0, 0, 1, 1])
 
         # Generate scatter plot of centroid data
-        s = ax.scatter(x = Xc, y = Yc, c=color, cmap='Spectral')
+        s = ax.scatter(x = Xc, y = Yc, c=np.linspace(0,1,len(color)), cmap='Spectral')
        
         # Set default labels
         ax.set_title('Beam Centroid')

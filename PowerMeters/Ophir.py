@@ -38,6 +38,9 @@ class Ophir(PowerMeter):
             pass
         except:
             print('FilePathError: invalid file path')
+<<<<<<< HEAD
 
+=======
+>>>>>>> 32183d11fe792fc4f2ae58c9ae07c987fe48c32b
             self.log.append('FilePathError: invalid file path')      
 
