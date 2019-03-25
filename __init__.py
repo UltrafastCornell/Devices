@@ -2,7 +2,7 @@
 import Devices.Device as Device
 
 # Import Device GUI
-from Devices import Device_GUI
+import Devices.Device_GUI as Device_GUI
 
 # Import each class of devices
 import Devices.Cameras as Cameras

@@ -28,28 +28,36 @@ import tkinter as tk
 class Device_GUI(tk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
+        
 
-        items = {"one": ["a","b","c"],
-                 "two": ["d","e","f"],
-                 "three": ["g","h","i"]}
-
+        # ***** Main Menu *****
+        # Devices to choose from
+        devices = {"Cameras": ["DataRay"],
+                 "Power Meters": ["Coherent", "Ophir"],
+                 "Spectrometers": ["OceanOptics"]}
+        
+        
         self.the_value = tk.StringVar()
-        self.the_value.set("a")
+        self.the_value.set("Choose a Device")
 
         self.menubutton = tk.Menubutton(self, textvariable=self.the_value, indicatoron=True)
         self.topMenu = tk.Menu(self.menubutton, tearoff=False)
         self.menubutton.configure(menu=self.topMenu)
 
-        for key in sorted(items.keys()):
+        for key in sorted(devices.keys()):
             menu = tk.Menu(self.topMenu)
             self.topMenu.add_cascade(label=key, menu=menu)
-            for value in items[key]:
+            for value in devices[key]:
                 menu.add_radiobutton(label=value, variable = self.the_value, value=value)
 
-        self.menubutton.pack()
+        self.menubutton.pack(side = "left")
+        
+        # ***** Status Bar *****
+        
+        status = tk.Label(parent, text = "Nothing for now...", bd = 1, relief = "sunken", anchor = "w")
+        status.pack(side = "bottom", fill = "x")
 
-
-if __name__ == "__main__":
+if __name__: #== "__main__":
     root = tk.Tk()
 
     # Title root
@@ -59,4 +67,6 @@ if __name__ == "__main__":
     
     # Move root to top
     root.attributes("-topmost", True)
+    
+    root.geometry("500x300")
     root.mainloop()
