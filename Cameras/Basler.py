@@ -16,12 +16,7 @@ class Basler(Camera):
     def __init__(self):
         # Initialize camera base class
         Camera.__init__(self)
-        
-        # Store beam image data
-        self.beam_image = None
 
-        # Measured centroid data as a pandas DataFrame
-        self.centroid = None
 
 
     def Load_Beam_Image(self, file_path = []):

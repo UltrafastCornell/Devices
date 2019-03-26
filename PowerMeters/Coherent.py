@@ -17,9 +17,6 @@ class Coherent(PowerMeter):
         # Initialize PowerMeter base class
         PowerMeter.__init__(self)
 
-        # Measured data as a pandas DataFrame
-        self.data = None
-
 
     
     # Load  measurement as a Pandas data frame

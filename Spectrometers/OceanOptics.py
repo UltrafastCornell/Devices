@@ -16,6 +16,3 @@ class OceanOptics(Spectrometer):
     def __init__(self):
         # Initialize PowerMeter base class
         Spectrometer.__init__(self)
-        
-        # Measured data as a pandas DataFrame
-        self.spectrum = None

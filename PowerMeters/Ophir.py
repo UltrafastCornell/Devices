@@ -20,7 +20,7 @@ class Ophir(PowerMeter):
         PowerMeter.__init__(self)
 
         # Measured data as a pandas DataFrame
-        self.power = None
+        self.data = None
 
 
 
@@ -138,7 +138,7 @@ class Ophir(PowerMeter):
         """Plot centroid as a function of time"""
         
         # Check if centroid data has been properly loaded
-        if not self._Is_Data_Loaded(self.power):
+        if not self._Is_Data_Loaded(self.data):
             self.Load_Power()    
         
         sns.set_context('notebook',font_scale=1.5);
@@ -148,7 +148,7 @@ class Ophir(PowerMeter):
 
         for i in range(num):
             channel_label = chr(ord('A')+i);
-            ax[i].plot(self.power['Timestamp '+channel_label], self.power['Channel '+channel_label]);
+            ax[i].plot(self.data['Timestamp '+channel_label], self.data['Channel '+channel_label]);
             ax[i].set_ylabel('Power ('+self.units[i]+')');
             ax[i].grid()
     

@@ -17,9 +17,6 @@ class DataRay(Camera):
     def __init__(self):
         # Initialize camera base class
         Camera.__init__(self)
-        
-        # Measured centroid data as a pandas DataFrame
-        self.centroid = None
 
 
 
@@ -29,13 +26,13 @@ class DataRay(Camera):
         Device.Load_Data(self, file_path)
 
         try:
-            self.centroid = pd.read_excel(self.current_file_path)
+            self.data = pd.read_excel(self.current_file_path)
         except:
             print('FilePathError: invalid file path')
             self.log.append('FilePathError: invalid file path')
         
         # Get rid of spaces in column titles
-        self.centroid = self.centroid.rename(index=str, columns={" Xc ": "Xc", " Yc ": "Yc"})
+        self.data = self.data.rename(index=str, columns={" Xc ": "Xc", " Yc ": "Yc"})
 
 
     
@@ -43,11 +40,11 @@ class DataRay(Camera):
         """Normalize centroid measurement by the beam radius"""
 
         # Check if centroid data has been properly loaded
-        if not self._Is_Data_Loaded(self.centroid):
+        if not self._Is_Data_Loaded(self.data):
             self.Load_Centroid()    
 
-        self.centroid["Xc"] = self.centroid["Xc"]/Xr
-        self.centroid["Yc"] = self.centroid["Yc"]/Yr        
+        self.data["Xc"] = self.data["Xc"]/Xr
+        self.data["Yc"] = self.data["Yc"]/Yr        
 
 
 
@@ -55,15 +52,15 @@ class DataRay(Camera):
         """Plot centroid as a function of time"""
         
         # Check if centroid data has been properly loaded
-        if not self._Is_Data_Loaded(self.centroid):
+        if not self._Is_Data_Loaded(self.data):
             self.Load_Data()    
         
         # Grab centroid X and Y coordinates
-        Xc = self.centroid["Xc"]
-        Yc = self.centroid["Yc"]
+        Xc = self.data["Xc"]
+        Yc = self.data["Yc"]
 
         # Set scatter plot color based on element index
-        color = self.centroid.index
+        color = self.data.index
            
         # Create new figure
         fig = plt.figure()
