@@ -1,4 +1,5 @@
 # Import Camera base class
+from ..Device import Device
 from .Spectrometer import Spectrometer
 
 # Import packages for data analysis

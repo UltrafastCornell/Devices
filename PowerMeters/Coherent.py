@@ -1,4 +1,5 @@
 # Import Camera base class
+from ..Device import Device
 from .PowerMeter import PowerMeter
 
 # Import packages for data analysis

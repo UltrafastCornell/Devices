@@ -1,4 +1,5 @@
 # Import Camera base class
+from ..Device import Device
 from .Camera import Camera
 
 # Import packages for data analysis
@@ -19,7 +20,7 @@ class Basler(Camera):
 
 
 
-    def Load_Beam_Image(self, file_path = []):
+    def Load_Data(self, file_path = []):
         """Load centroid measurement as a Pandas data frame saved in centroid"""
         
         # Override Device.Load_Data() method
