@@ -24,14 +24,12 @@ class Coherent(PowerMeter):
     
     # Load  measurement as a Pandas data frame
     # saved in 
-    def Load_Centroid(self, file_path = False):
-        # Get the file path of the  measurement
-        if not file_path:
-            # Prompt user to locate the file path
-            file_path = self._Get_File_Path()
+    def Load_Data(self, file_path = []):
+        # Override Device.Load_Data() method
+        Device.Load_Data(self, file_path)
 
         try:
-            #  = pd.read_excel(file_path)
+            #  = pd.read_excel(self.current_file_path)
             pass
         except:
             print('FilePathError: invalid file path')

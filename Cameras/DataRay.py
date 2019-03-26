@@ -1,4 +1,5 @@
 # Import Camera base class
+from ..Device import Device
 from .Camera import Camera
 
 # Import packages for data analysis
@@ -22,16 +23,13 @@ class DataRay(Camera):
 
 
 
-    def Load_Centroid(self, file_path = False):
+    def Load_Data(self, file_path = []):
         """Load centroid measurement as a Pandas data frame saved in centroid"""
 
-        # Get the file path of the centroid measurement
-        if not file_path:
-            # Prompt user to locate the file path
-            file_path = self._Get_File_Path()
+        Device.Load_Data(self, file_path)
 
         try:
-            self.centroid = pd.read_excel(file_path)
+            self.centroid = pd.read_excel(self.current_file_path)
         except:
             print('FilePathError: invalid file path')
             self.log.append('FilePathError: invalid file path')
@@ -58,7 +56,7 @@ class DataRay(Camera):
         
         # Check if centroid data has been properly loaded
         if not self._Is_Data_Loaded(self.centroid):
-            self.Load_Centroid()    
+            self.Load_Data()    
         
         # Grab centroid X and Y coordinates
         Xc = self.centroid["Xc"]

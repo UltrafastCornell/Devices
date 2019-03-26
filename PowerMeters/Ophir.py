@@ -23,8 +23,9 @@ class Ophir(PowerMeter):
         self.power = None
 
 
+
     # Load  measurement as a Pandas data frame
-    def Load_Power(self, file_path = False):
+    def Load_Data(self, file_path = []):
         """Load power data from StarLab (Ophir) software. Returns the header separated into sections and a Pandas dataframe of power data."""
     
         def Section_Header(header):
@@ -35,7 +36,7 @@ class Ophir(PowerMeter):
             sub_list = [];
             sectioned_header = [];
             units_list = [];
-            meters_list = [];
+            power_meters_list = [];
     
             for row in header:
                 if not row or '---' in row[0]: # if row is empty
@@ -47,11 +48,11 @@ class Ophir(PowerMeter):
                     if 'Units' in row[0]:
                         units_list.append(row[0].split(':')[1])
                     if 'Name' in row[0]:
-                        meters_list.append(row[0].split(':')[1])
+                        power_meters_list.append(row[0].split(':')[1])
     
             sectioned_header.append(sub_list) # append last collected sub_list to sorted_list
         
-            return sectioned_header, units_list, meters_list
+            return sectioned_header, units_list, power_meters_list
     
         def Clean_Data(data):
             ### Prepare data to construct dataframe.
@@ -84,16 +85,14 @@ class Ophir(PowerMeter):
         
             return column_labels, numerical_data
     
-        # Get the file path of the  measurement
-        if not file_path:
-            # Prompt user to locate the file path
-            file_path = self._Get_File_Path()
+        # Override Device.Load_Data() method
+        Device.Load_Data(self, file_path)
         
         ### Load and read csv file.
         file = [];
         
         try:
-            with open(file_path, "r") as csvfile:
+            with open(self.current_file_path, "r") as csvfile:
                 # csvfile.seek(character_number) # reset cursor to specified character of csvfile
                 # csvfile.read(character_number) # read to specified character number of csvfile
                 myReader = csv.reader(csvfile, delimiter='\t')
@@ -120,7 +119,7 @@ class Ophir(PowerMeter):
         data = np.array(file[data_start:])[:,0:3];
     
         ### Section header
-        sectioned_header, units_list, meters_list = Section_Header(header);
+        sectioned_header, units_list, power_meters_list = Section_Header(header);
     
         ### Prepare data to construct dataframe
         column_labels, numerical_data = Clean_Data(data);
@@ -128,10 +127,12 @@ class Ophir(PowerMeter):
         ### Construct dataframe
         df = pd.DataFrame(columns = column_labels, data = numerical_data)
     
-        self.power = df;
+        self.data = df;
         self.header = sectioned_header;
-        self.meters = meters_list;
+        self.power_meters = power_meters_list;
         self.units = units_list;
+
+
 
     def Plot_Power(self):
         """Plot centroid as a function of time"""

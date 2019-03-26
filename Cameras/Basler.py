@@ -24,16 +24,14 @@ class Basler(Camera):
         self.centroid = None
 
 
-    def Load_Beam_Image(self, file_path = False):
+    def Load_Beam_Image(self, file_path = []):
         """Load centroid measurement as a Pandas data frame saved in centroid"""
-
-        # Get the file path of the centroid measurement
-        if not file_path:
-            # Prompt user to locate the file path
-            file_path = self._Get_File_Path()
+        
+        # Override Device.Load_Data() method
+        Device.Load_Data(self, file_path)
 
         try:
-            self.beam_image = pd.read_csv(file_path)
+            self.beam_image = pd.read_csv(self.current_file_path)
         except:
             print('FilePathError: invalid file path')
             self.log.append('FilePathError: invalid file path')
