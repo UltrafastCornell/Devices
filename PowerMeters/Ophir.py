@@ -132,3 +132,41 @@ class Ophir(PowerMeter):
         self.header = sectioned_header;
         self.meters = meters_list;
         self.units = units_list;
+
+    def Plot_Power(self):
+        """Plot centroid as a function of time"""
+        
+        # Check if centroid data has been properly loaded
+        if not self._Is_Data_Loaded(self.power):
+            self.Load_Power()    
+        
+        sns.set_context('notebook',font_scale=1.5);
+        num = len(self.meters);
+
+        fig, ax = plt.subplots(nrows=num,ncols=1,figsize=(16,10), sharex=True);
+
+        for i in range(num):
+            channel_label = chr(ord('A')+i);
+            ax[i].plot(self.power['Timestamp '+channel_label], self.power['Channel '+channel_label]);
+            ax[i].set_ylabel('Power ('+self.units[i]+')');
+            ax[i].grid()
+    
+            last = i;
+
+        ax[last].set_xlabel('Time(s)');  
+        plt.tight_layout()
+
+        # Set scatter plot color based on element index
+        # color = self.centroid.index
+
+        # Generate scatter plot of centroid data
+        # s = ax.scatter(x = Xc, y = Yc, c=np.linspace(0,1,len(color)), cmap='Spectral')
+
+        # Set axis below plotted data
+        # ax.set_axisbelow(True)
+
+        # Create and label colorbar
+        # cb = plt.colorbar(s)
+        # cb.set_label('Time [s]')
+
+        return ax
