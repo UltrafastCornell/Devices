@@ -27,7 +27,7 @@ class Basler(Camera):
         Device.Load_Data(self, file_path)
 
         try:
-            self.beam_image = pd.read_csv(self.current_file_path)
+            self.data = pd.read_csv(self.current_file_path, sep='\t', lineterminator='\n')
         except:
             print('FilePathError: invalid file path')
             self.log.append('FilePathError: invalid file path')
