@@ -3,3 +3,4 @@ from Devices.Cameras.Camera import Camera
 
 # Load individual camera classes
 from Devices.Cameras.DataRay import DataRay
+from Devices.Cameras.Basler import Basler
