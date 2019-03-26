@@ -142,12 +142,14 @@ class Ophir(PowerMeter):
         
         sns.set_context('notebook',font_scale=1.5);
         num = len(self.meters);
+        color=iter(plt.cm.rainbow(np.linspace(0,1,num)));
 
         fig, ax = plt.subplots(nrows=num,ncols=1,figsize=(16,10), sharex=True);
 
         for i in range(num):
             channel_label = chr(ord('A')+i);
-            ax[i].plot(self.power['Timestamp '+channel_label], self.power['Channel '+channel_label]);
+            c=next(color);
+            ax[i].plot(self.power['Timestamp '+channel_label], self.power['Channel '+channel_label], c=c);
             ax[i].set_ylabel('Power ('+self.units[i]+')');
             ax[i].grid()
     
