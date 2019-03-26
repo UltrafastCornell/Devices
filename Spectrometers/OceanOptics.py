@@ -14,10 +14,6 @@ class OceanOptics(Spectrometer):
     #   data from Ocean Optics spectrometers
     
     def __init__(self):
-<<<<<<< HEAD
-
-=======
->>>>>>> 32183d11fe792fc4f2ae58c9ae07c987fe48c32b
         # Initialize PowerMeter base class
         Spectrometer.__init__(self)
         

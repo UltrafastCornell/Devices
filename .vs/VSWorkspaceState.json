@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Cameras",
+    "\\PowerMeters",
+    "\\Spectrometers"
   ],
-  "SelectedNode": "\\Cameras",
+  "SelectedNode": "\\Spectrometers\\Spectrometer.py",
   "PreviewInSolutionExplorer": false
 }
