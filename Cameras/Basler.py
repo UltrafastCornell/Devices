@@ -46,7 +46,7 @@ class Basler(Camera):
 
         self.data["Xc"] = self.data["Xc"]/Xr
         self.data["Yc"] = self.data["Yc"]/Yr        
-
+        
 
 
     def Plot_Centroid(self):
