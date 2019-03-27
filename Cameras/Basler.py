@@ -20,24 +20,34 @@ class Basler(Camera):
 
 
 
+    # Override Device.Load_Data() method
     def Load_Data(self, file_path = []):
         """Load centroid measurement as a Pandas data frame saved in centroid"""
-        
-        # Override Device.Load_Data() method
+        # Run parent method
         Device.Load_Data(self, file_path)
 
         try:
-            self.data = pd.read_csv(self.current_file_path, delimiter='\t', lineterminator='\n')
+            # Read Pandas dataframe from a csv
+            df = pd.read_csv(self.current_file_path, delimiter='\t', lineterminator='\n')
             
             # Drop unnecessary columns
-            if '\r' in self.data.columns:
-                self.data.drop(['\r'], axis = 1, inplace = True)
+            if '\r' in df.columns:
+                df.drop(['\r'], axis = 1, inplace = True)
         except:
             print('FilePathError: invalid file path')
             self.log.append('FilePathError: invalid file path')
         
         # Rename centroid labels
-        self.data = self.data.rename(index=str, columns={"Mx All [px]": "Xc", "My All [px]": "Yc"})
+        df = df.rename(index=str, columns={"Mx All [px]": "Xc", "My All [px]": "Yc"})
+        
+        # Choos a name for this data set
+        data_name = self.current_file_path.split("/")[-1].split(".")[0]     
+        
+        # Add data_name as a super header
+        df.columns = pd.MultiIndex.from_product([[data_name], list(df.columns)])
+
+        # Add this data set to the rest of the data
+        self.data = pd.concat([self.data, df], axis = 1)
 
 
     
@@ -57,8 +67,8 @@ class Basler(Camera):
         """Plot centroid as a function of time"""
         
         # Check if centroid data has been properly loaded
-        #if not self._Is_Data_Loaded(self.data):
-        #    self.Load_Data()    
+        if not self._Is_Data_Loaded(self.data):
+            self.Load_Data()    
         
         # Grab centroid X and Y coordinates
         Xc = self.data["Xc"]

@@ -7,7 +7,7 @@ class Device:
     
     def __init__(self):
         # Dataframe containing all of the device data
-        self.data = None
+        self.data = []
         
         # File path of data
         self.current_file_path = []
@@ -40,7 +40,7 @@ class Device:
         """Check if the user has loaded data"""
 
         try:
-            data == None
+            data == []
 
         except:
             # The user has loaded the data
