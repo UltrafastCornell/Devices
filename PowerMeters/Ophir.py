@@ -149,13 +149,14 @@ class Ophir(PowerMeter):
 
         for i in range(num):
             channel_label = chr(ord('A')+i);
-            ax[i].plot(self.data['Timestamp '+channel_label], self.data['Channel '+channel_label]);
+            ax[i].plot(self.data['Timestamp '+channel_label], self.data['Channel '+channel_label], label = self.power_meters[i]);
             ax[i].set_ylabel('Power ('+self.units[i]+')');
-            ax[i].grid()
+            ax[i].grid();
+            ax[i].legend(loc = 'best');
     
             last = i;
 
-        ax[last].set_xlabel('Time(s)');  
+        ax[last].set_xlabel('Time(s)');
         plt.tight_layout()
 
         # Set scatter plot color based on element index
