@@ -32,8 +32,8 @@ class Basler(Camera):
             print('FilePathError: invalid file path')
             self.log.append('FilePathError: invalid file path')
         
-        # Get rid of spaces in column titles
-        #self.centroid = self.centroid.rename(index=str, columns={" Xc ": "Xc", " Yc ": "Yc"})
+        # Rename centroid labels
+        self.data = self.data.rename(index=str, columns={"Mx All [px]": "Xc", "My All [px]": "Yc"})
 
 
     
@@ -44,8 +44,8 @@ class Basler(Camera):
         if not self._Is_Data_Loaded(self.centroid):
             self.Load_Centroid()    
 
-        self.centroid["Xc"] = self.centroid["Xc"]/Xr
-        self.centroid["Yc"] = self.centroid["Yc"]/Yr        
+        self.data["Xc"] = self.data["Xc"]/Xr
+        self.data["Yc"] = self.data["Yc"]/Yr        
 
 
 
@@ -53,15 +53,15 @@ class Basler(Camera):
         """Plot centroid as a function of time"""
         
         # Check if centroid data has been properly loaded
-        if not self._Is_Data_Loaded(self.centroid):
-            self.Load_Centroid()    
+        #if not self._Is_Data_Loaded(self.data):
+        #    self.Load_Data()    
         
         # Grab centroid X and Y coordinates
-        Xc = self.centroid["Xc"]
-        Yc = self.centroid["Yc"]
+        Xc = self.data["Xc"]
+        Yc = self.data["Yc"]
 
         # Set scatter plot color based on element index
-        color = self.centroid.index
+        color = self.data.index
            
         # Create new figure
         fig = plt.figure()
