@@ -26,7 +26,7 @@ class Coherent(PowerMeter):
         Device.Load_Data(self, file_path)
 
         try:
-            data = pd.read_csv('1603 compressor warmup.csv', delimiter = ',', header = 2);
+            data = pd.read_csv(file_path, delimiter = ',', header = 2);
         except:
             print('FilePathError: invalid file path')
             self.log.append('FilePathError: invalid file path')
