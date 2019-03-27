@@ -27,7 +27,11 @@ class Basler(Camera):
         Device.Load_Data(self, file_path)
 
         try:
-            self.data = pd.read_csv(self.current_file_path, sep='\t', lineterminator='\n')
+            self.data = pd.read_csv(self.current_file_path, delimiter='\t', lineterminator='\n')
+            
+            # Drop unnecessary columns
+            if '\r' in self.data.columns:
+                self.data.drop(['\r'], axis = 1, inplace = True)
         except:
             print('FilePathError: invalid file path')
             self.log.append('FilePathError: invalid file path')
