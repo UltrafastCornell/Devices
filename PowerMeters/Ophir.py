@@ -140,10 +140,10 @@ class Ophir(PowerMeter):
         
         # Check if centroid data has been properly loaded
         if not self._Is_Data_Loaded(self.data):
-            self.Load_Power()    
+            self.Load_Data()    
         
         sns.set_context('notebook',font_scale=1.5);
-        num = len(self.meters);
+        num = len(self.power_meters);
 
         fig, ax = plt.subplots(nrows=num,ncols=1,figsize=(16,10), sharex=True);
 
