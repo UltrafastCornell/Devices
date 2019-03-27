@@ -142,34 +142,30 @@ class Ophir(PowerMeter):
         if not self._Is_Data_Loaded(self.data):
             self.Load_Data()    
         
+        # Set figure format
         sns.set_context('notebook',font_scale=1.5);
+
+        # Get number of power meters
         num = len(self.power_meters);
 
+        # Create new figure and axis object
         fig, ax = plt.subplots(nrows=num,ncols=1,figsize=(16,10), sharex=True);
 
+        # Plot data on axis object for each power meter
         for i in range(num):
             channel_label = chr(ord('A')+i);
             ax[i].plot(self.data['Timestamp '+channel_label], self.data['Channel '+channel_label], label = self.power_meters[i]);
-            ax[i].set_ylabel('Power ('+self.units[i]+')');
-            ax[i].grid();
-            ax[i].legend(loc = 'best');
-    
+            ax[i].set_ylabel('Power ('+self.units[i]+')'); # Set default y label
+            ax[i].grid(); # Turn grid on for axis
+            ax[i].legend(loc = 'best'); # Create legend for axis containing power meter name. Set its location to best.
+            
+            # Record index of last iteration
             last = i;
 
+        # Set x label of last axis object to default label
         ax[last].set_xlabel('Time(s)');
+
+        # Call plot tight layout
         plt.tight_layout()
-
-        # Set scatter plot color based on element index
-        # color = self.centroid.index
-
-        # Generate scatter plot of centroid data
-        # s = ax.scatter(x = Xc, y = Yc, c=np.linspace(0,1,len(color)), cmap='Spectral')
-
-        # Set axis below plotted data
-        # ax.set_axisbelow(True)
-
-        # Create and label colorbar
-        # cb = plt.colorbar(s)
-        # cb.set_label('Time [s]')
 
         return ax
