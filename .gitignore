@@ -1,0 +1,3 @@
+# Ignore temporary files from python and vs
+*__pycache__
+*.vs
