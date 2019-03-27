@@ -140,22 +140,23 @@ class Ophir(PowerMeter):
         
         # Check if centroid data has been properly loaded
         if not self._Is_Data_Loaded(self.data):
-            self.Load_Power()    
+            self.Load_Data()    
         
         sns.set_context('notebook',font_scale=1.5);
-        num = len(self.meters);
+        num = len(self.power_meters);
 
         fig, ax = plt.subplots(nrows=num,ncols=1,figsize=(16,10), sharex=True);
 
         for i in range(num):
             channel_label = chr(ord('A')+i);
-            ax[i].plot(self.data['Timestamp '+channel_label], self.data['Channel '+channel_label]);
+            ax[i].plot(self.data['Timestamp '+channel_label], self.data['Channel '+channel_label], label = self.power_meters[i]);
             ax[i].set_ylabel('Power ('+self.units[i]+')');
-            ax[i].grid()
+            ax[i].grid();
+            ax[i].legend(loc = 'best');
     
             last = i;
 
-        ax[last].set_xlabel('Time(s)');  
+        ax[last].set_xlabel('Time(s)');
         plt.tight_layout()
 
         # Set scatter plot color based on element index
