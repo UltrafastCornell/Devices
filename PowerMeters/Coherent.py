@@ -26,7 +26,7 @@ class Coherent(PowerMeter):
         Device.Load_Data(self, file_path)
 
         try:
-            data = pd.read_csv('1603 compressor warmup.csv', delimiter = ',', header = 2);
+            data = pd.read_csv(self.current_file_path, delimiter = ',', header = 2);
         except:
             print('FilePathError: invalid file path')
             self.log.append('FilePathError: invalid file path')
@@ -46,8 +46,8 @@ class Coherent(PowerMeter):
             self.Load_Data()    
         
         # Get time (s) and power from dataframe
-        time = data['Time (s)'];
-        power = data['0246D17R:Watts'];
+        time = self.data['Time (s)'];
+        power = self.data['0246D17R:Watts'];
 
         # Set figure format
         sns.set_context('notebook',font_scale=1.5);
