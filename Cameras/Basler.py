@@ -18,6 +18,8 @@ class Basler(Camera):
         # Initialize camera base class
         Camera.__init__(self)
 
+		# Measured data as a pandas DataFrame
+        self.data = None
 
 
     # Override Device.Load_Data() method
