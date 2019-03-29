@@ -39,18 +39,15 @@ class Device:
     def _Is_Data_Loaded(self, data):
         """Check if the user has loaded data"""
 
-        try:
-            data == []
-
-        except:
-            # The user has loaded the data
-            self.log.append("Check for loaded data passed")
-            return True
-
-        else:
+        if data == []:
             # The user has not loaded the data
             self.log.append("Check for loaded data failed")
             return False
+        
+        else:
+            # The user has loaded the data
+            self.log.append("Check for loaded data passed")
+            return True
 
 
 

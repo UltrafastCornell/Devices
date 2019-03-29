@@ -22,7 +22,7 @@ class Basler(Camera):
         # Initialize camera base class
         Camera.__init__(self)
 
-        self.data = None
+
 
     # Override Device.Load_Data() method
     def Load_Data(self, file_path = []):
@@ -50,27 +50,9 @@ class Basler(Camera):
         Get_Time = lambda time: datetime.strptime(time, '%Y/%m/%d %H:%M:%S.%f').timestamp()
         time = [Get_Time(time) - Get_Time(df['TimeStamp'][0]) for time in df['TimeStamp']]
         df['Time'] = time
-        
-        # Choos a label for this data set
-        data_label = self.current_file_path.split("/")[-1].split(".")[0]     
-        
-        # Add data_label as a super header
-        df.columns = pd.MultiIndex.from_product([[data_label], list(df.columns)])
-        
+
         # Add this data set to the rest of the data
-        self.data = pd.concat([self.data, df], axis = 1)#, ignore_index = True)#.reindex(df.index)
-
-
-
-    @property
-    def data_labels(self):
-        """Return a list of data labels"""
-
-        # Check if data is loaded and return a list of labels
-        if self._Is_Data_Loaded(self.data):
-            return list(self.data.columns.levels[0])
-        else:
-            return []
+        self.data.append(df)
     
 
 
@@ -100,12 +82,8 @@ class Basler(Camera):
         # Color maps for plotting different sets of data
         cmaps = ["Blues", "Greens", "Reds", "Purples", "Oranges"]
         
-        for data_label in self.data_labels:
-            # The current data set
-            data = self.data[data_label]
-
-            # Keeps track of number of data sets plotted
-            data_index = self.data_labels.index(data_label)
+        data_index = 0
+        for data in self.data:
             
             # Get time data
             Time = data['Time']
@@ -126,6 +104,9 @@ class Basler(Camera):
             cb = plt.colorbar(s)
             cb.set_label('Time [s]')
             
+            # Keeps track of number of data sets plotted
+            data_index += 1
+
         # Set default labels
         ax.set_title('Beam Centroid')
         ax.set_xlabel('$X_{c}$ $[\mu m]$')
