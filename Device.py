@@ -27,7 +27,7 @@ class Device:
         root.attributes("-topmost", True)
         
         # String containing the file path
-        file_path = filedialog.askopenfilename()
+        file_path = filedialog.askopenfilenames(parent=root, title='Open Data')
 
         # Destroy the root window
         root.destroy()

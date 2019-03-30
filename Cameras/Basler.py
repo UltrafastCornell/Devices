@@ -52,7 +52,7 @@ class Basler(Camera):
         df['Time'] = time
 
         # Add this data set to the rest of the data
-        self.data.append(df)
+        self.data = self.data + df
     
 
 
