@@ -29,22 +29,17 @@ class Basler(Camera):
         """Load centroid measurement as a Pandas data frame saved in centroid"""
         # Run parent method
         Device.Load_Data(self, file_path)
-
-        try:
-            # Read Pandas dataframe from a csv
-            # df = pd.read_csv(self.current_file_path, delimiter='\t', lineterminator='\n')
-            
-            # Read multiple files to their own dataframes. Create a list of dataframes      
-            df_array = [pd.read_csv(file, delimiter='\t', lineterminator='\n') for file in self.current_file_path]
-            
-        except:
-            print('FilePathError: invalid file path')
-            self.log.append('FilePathError: invalid file path')
-            return
         
-        # Drop unnecessary columns
-        for i in range(len(self.current_file_path)):
-            df = df_array[i]
+        for file_path in self.current_file_path:
+            try:
+                # Read Pandas dataframe from a csv   
+                df = pd.read_csv(file_path, delimiter='\t', lineterminator='\n')
+            
+            except:
+                self.log.append(('FilePathError: ', file_path, ' is an invalid file path'))
+                return
+            
+            # Drop unnecessary columns
             if '\r' in df.columns:
                 df.drop(['\r'], axis = 1, inplace = True)
 
@@ -55,10 +50,11 @@ class Basler(Camera):
             Get_Time = lambda time: datetime.strptime(time, '%Y/%m/%d %H:%M:%S.%f').timestamp()
             time = [Get_Time(time) - Get_Time(df['TimeStamp'][0]) for time in df['TimeStamp']]
             df['Time'] = time
-            df_array[i] = df
+            
+            # Add this data set to the rest of the data
+            self.data += [df]
 
-        # Add this data set to the rest of the data
-        self.data = self.data + df_array
+
     
 
 
