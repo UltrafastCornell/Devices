@@ -74,12 +74,12 @@ class Ando(Spectrometer):
             amplitude_linear = 10**(amplitude/10) / np.max(10**(amplitude/10))
 
             # Generate scatter plot of centroid data
-            ax[data_index, 0].plot(wavelength, amplitude_linear, c=color_list[data_index%len(color_list)])
+            ax[data_index, 0].plot(wavelength, amplitude_linear, c=color_list[data_index%len(color_list)], lw = 4)
             
             # Set default labels
-            ax[data_index, 0].set_title('Ando Spectra')
+            ax[data_index, 0].set_title('File #' + str(data_index + 1))
             ax[data_index, 0].set_xlabel('Wavelength [nm]')
-            ax[data_index, 0].set_ylabel('Amplitude [AU]')
+            ax[data_index, 0].set_ylabel('Amplitude [A.U.]')
 
             # Keeps track of number of data sets plotted
             data_index += 1
