@@ -47,16 +47,59 @@ class Ando(Spectrometer):
 
 
 
-    def Plot_Spectrum(self):
+    def Plot_Spectrum(self, same_axis = True):
         """Plot spectrum from Ando spectrum analyzer"""
         
         # Check if centroid data has been properly loaded
         if not self._Is_Data_Loaded(self.data):
             self.Load_Data()    
 
+        if same_axis:
+            ax = self.Plot_Same_Axis()
+        else:
+            ax = self.Plot_Diff_Axis()
+
+        plt.tight_layout()
+
+        return ax
+
+
+
+    def Plot_Same_Axis(self):
+        '''Plot all recorded files on the same figure axis.'''
+
         # Create new figure
-        # fig = plt.figure()
-        # ax = fig.add_axes([0, 0, 1, 1])
+        fig, ax = plt.subplots(nrows = 1, ncols = 1, squeeze = False, figsize = (24, 12))
+        
+        # Color maps for plotting different sets of data
+        color_list = ["blue", "green", "red", "purple", "orange"]
+        
+        data_index = 0
+        for data in self.data:
+
+            # Grab wavelength and amplitude from recorded data
+            wavelength = data["Wavelength"]
+            amplitude = data["Amplitude"]
+
+            amplitude_linear = 10**(amplitude/10) / np.max(10**(amplitude/10))
+
+            # Generate scatter plot of centroid data
+            ax[0, 0].plot(wavelength, amplitude_linear, c=color_list[data_index%len(color_list)], lw = 4)
+            
+            # Keeps track of number of data sets plotted
+            data_index += 1
+
+        # Set default labels
+        ax[0, 0].set_title('Ando Spectra')
+        ax[0, 0].set_xlabel('Wavelength [nm]')
+        ax[0, 0].set_ylabel('Amplitude [A.U.]')
+            
+        return ax
+
+
+
+    def Plot_Diff_Axis(self):
+        '''Plot all recorded files on their own axes.'''
 
         # Create new figure
         fig, ax = plt.subplots(nrows = len(self.data), ncols = 1, squeeze = False, figsize = (24, 6 * len(self.data)))
@@ -83,10 +126,5 @@ class Ando(Spectrometer):
 
             # Keeps track of number of data sets plotted
             data_index += 1
-
-        # # Set axis below plotted data
-        # ax.set_axisbelow(True)
-
-        plt.tight_layout()
 
         return ax
