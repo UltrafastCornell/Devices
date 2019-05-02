@@ -129,7 +129,7 @@ class Ophir(PowerMeter):
         ### Construct dataframe
         df = pd.DataFrame(columns = column_labels, data = numerical_data)
     
-        self.data = df;
+        self.data = [df];
         self.header = sectioned_header;
         self.power_meters = power_meters_list;
         self.units = units_list;
@@ -139,10 +139,13 @@ class Ophir(PowerMeter):
     def Plot_Power(self):
         """Plot centroid as a function of time"""
         
-        ## Check if power data has been properly loaded
-        #if not self._Is_Data_Loaded(self.data):
-        #    self.Load_Data()    
+        # Check if power data has been properly loaded
+        if not self._Is_Data_Loaded(self.data):
+            self.Load_Data()    
         
+        # Unpack dataframe from data list
+        df = self.data[0]
+
         # Set figure format
         sns.set_context('notebook',font_scale=1.5);
 
@@ -155,7 +158,7 @@ class Ophir(PowerMeter):
         # Plot data on axis object for each power meter
         for i in range(num):
             channel_label = chr(ord('A')+i);
-            ax[i, 0].plot(self.data['Timestamp '+channel_label], self.data['Channel '+channel_label], label = self.power_meters[i]);
+            ax[i, 0].plot(df['Timestamp '+channel_label], df['Channel '+channel_label], label = self.power_meters[i]);
             ax[i, 0].set_ylabel('Power ('+self.units[i]+')'); # Set default y label
             ax[i, 0].grid(); # Turn grid on for axis
             ax[i, 0].legend(loc = 'best'); # Create legend for axis containing power meter name. Set its location to best.
