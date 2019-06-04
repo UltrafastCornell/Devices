@@ -33,7 +33,8 @@ class Basler(Camera):
         for file_path in self.current_file_path:
             try:
                 # Read Pandas dataframe from a csv   
-                df = pd.read_csv(file_path, delimiter='\t', lineterminator='\n')
+                #df = pd.read_csv(file_path, delimiter='\t', lineterminator='\n')
+                df = pd.read_csv(file_path)#, delimiter='\t')
             
             except:
                 self.log.append(('FilePathError: ', file_path, ' is an invalid file path'))
@@ -44,13 +45,15 @@ class Basler(Camera):
                 df.drop(['\r'], axis = 1, inplace = True)
 
             # Rename centroid labels
-            df = df.rename(index=str, columns={"Mx All [px]": "Xc", "My All [px]": "Yc"})
+            #df = df.rename(index=str, columns={"#1 MX [mm]": "Xc", "#1 MY [mm]": "Yc"})
         
             # Create a Time column that contains the time of each data point in seconds
-            Get_Time = lambda time: datetime.strptime(time, '%Y/%m/%d %H:%M:%S.%f').timestamp()
-            time = [Get_Time(time) - Get_Time(df['TimeStamp'][0]) for time in df['TimeStamp']]
-            df['Time'] = time
+            #Get_Time = lambda time: datetime.strptime(time, '%Y/%m/%d %H:%M:%S').timestamp()
+            #time = [Get_Time(time) - Get_Time(df['Timestamp'][0]) for time in df['Timestamp']]
+            #df['Time'] = time
             
+            #df_IC = df[['Time', 'Xc', 'Yc']]
+
             # Add this data set to the rest of the data
             self.data += [df]
 
