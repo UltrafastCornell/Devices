@@ -20,14 +20,14 @@ class Ophir(PowerMeter):
         # Initialize PowerMeter base class
         PowerMeter.__init__(self)
 
-        # Measured data as a pandas DataFrame
-        self.data = None
+        # # Measured data as a pandas DataFrame
+        # self.data = None
 
 
 
     # Load  measurement as a Pandas data frame
     def Load_Data(self, file_path = []):
-        """Load power data from StarLab (Ophir) software. Returns the header separated into sections and a Pandas dataframe of power data."""
+        """Load power data from StarLab (Ophir) software. Returns the header separated into sections and a Pandas dataframe of power data. File paths must be entered in list format."""
     
         def Section_Header(header):
             ### Clean up header by sectioning into sublists
@@ -88,17 +88,21 @@ class Ophir(PowerMeter):
     
         # Override Device.Load_Data() method
         Device.Load_Data(self, file_path)
-        
+
         ### Load and read csv file.
         file = [];
-        
+
+        # Unpack file path from list - incompatible with multiple file selection via tkinter
+        unpacked_file_path = self.current_file_path[0]
+
         try:
-            with open(self.current_file_path, "r") as csvfile:
+            with open(unpacked_file_path, "r") as csvfile:
                 # csvfile.seek(character_number) # reset cursor to specified character of csvfile
                 # csvfile.read(character_number) # read to specified character number of csvfile
                 myReader = csv.reader(csvfile, delimiter='\t')
                 for row in myReader:
-                    file.append(row);
+                    # file.append(row)
+                    file += [row]
         except:
             print('FilePathError: invalid file path')
             self.log.append('FilePathError: invalid file path')
@@ -128,7 +132,7 @@ class Ophir(PowerMeter):
         ### Construct dataframe
         df = pd.DataFrame(columns = column_labels, data = numerical_data)
     
-        self.data = df;
+        self.data = [df];
         self.header = sectioned_header;
         self.power_meters = power_meters_list;
         self.units = units_list;
@@ -138,32 +142,35 @@ class Ophir(PowerMeter):
     def Plot_Power(self):
         """Plot centroid as a function of time"""
         
-        # Check if centroid data has been properly loaded
+        # Check if power data has been properly loaded
         if not self._Is_Data_Loaded(self.data):
             self.Load_Data()    
         
+        # Unpack dataframe from data list - incompatible with multiple file selection via tkinter
+        df = self.data[0]
+
         # Set figure format
-        sns.set_context('notebook',font_scale=1.5);
+        sns.set_context('poster',font_scale=1);
 
         # Get number of power meters
         num = len(self.power_meters);
 
         # Create new figure and axis object
-        fig, ax = plt.subplots(nrows=num,ncols=1,figsize=(16,10), sharex=True);
+        fig, ax = plt.subplots(nrows=num,ncols=1,figsize=(16,8), sharex=True, squeeze = False);
 
         # Plot data on axis object for each power meter
         for i in range(num):
             channel_label = chr(ord('A')+i);
-            ax[i].plot(self.data['Timestamp '+channel_label], self.data['Channel '+channel_label], label = self.power_meters[i]);
-            ax[i].set_ylabel('Power ('+self.units[i]+')'); # Set default y label
-            ax[i].grid(); # Turn grid on for axis
-            ax[i].legend(loc = 'best'); # Create legend for axis containing power meter name. Set its location to best.
+            ax[i, 0].plot(df['Timestamp '+channel_label], df['Channel '+channel_label], label = self.power_meters[i]);
+            ax[i, 0].set_ylabel('Power ['+self.units[i]+']'); # Set default y label
+            ax[i, 0].grid(alpha = 0.5); # Turn grid on for axis
+            ax[i, 0].legend(loc = 'best'); # Create legend for axis containing power meter name. Set its location to best.
             
             # Record index of last iteration
             last = i;
 
         # Set x label of last axis object to default label
-        ax[last].set_xlabel('Time(s)');
+        ax[last, 0].set_xlabel('Time [s]');
 
         # Call plot tight layout
         plt.tight_layout()
