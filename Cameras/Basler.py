@@ -174,6 +174,8 @@ class Basler(Camera):
 
         return ax
 
+
+
     def Plot_Trace(self, camera_list = ['In Coupling']):
         """Plot X and Y coordinates as functions of time. A list of cameras to plot should be included. The list can contain 'In Coupling', 'Single Pass', and/or 'Double Pass'."""
         
