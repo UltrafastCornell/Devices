@@ -21,6 +21,8 @@ class Basler(Camera):
     """Helper functions for formatting and plotting
     data from DataRay cameras"""
     
+
+
     def __init__(self):
         # Initialize camera base class
         Camera.__init__(self)

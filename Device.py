@@ -54,7 +54,7 @@ class Device:
     def Load_Data(self, file_path = []):
         """Load device data to be analyzed"""
 
-        # Get the file path of the centroid measurement
+        # Get the file path of the measurement
         if not file_path:
             # Prompt user to locate the file path
             file_path = self._Get_File_Path()
