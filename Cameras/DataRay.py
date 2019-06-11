@@ -25,15 +25,17 @@ class DataRay(Camera):
 
         Device.Load_Data(self, file_path)
 
-        try:
-            self.data = pd.read_excel(self.current_file_path)
-        except:
-            print('FilePathError: invalid file path')
-            self.log.append('FilePathError: invalid file path')
-        
-        # Get rid of spaces in column titles
-        self.data = self.data.rename(index=str, columns={" Xc ": "Xc", " Yc ": "Yc"})
+        for file_path in self.current_file_path:
 
+            try:
+                df = pd.read_excel(self.current_file_path)
+            except:
+                print('FilePathError: invalid file path')
+                self.log.append('FilePathError: invalid file path')
+        
+            # Get rid of spaces in column titles
+            df = df.rename(index=str, columns={" Xc ": "Xc", " Yc ": "Yc"})
+            self.data += [df]
 
     
     def Normalize_By_Radius(self, Xr, Yr):
@@ -55,20 +57,26 @@ class DataRay(Camera):
         if not self._Is_Data_Loaded(self.data):
             self.Load_Data()    
         
-        # Grab centroid X and Y coordinates
-        Xc = self.data["Xc"]
-        Yc = self.data["Yc"]
-
-        # Set scatter plot color based on element index
-        color = self.data.index
-           
         # Create new figure
         fig = plt.figure()
         ax = fig.add_axes([0, 0, 1, 1])
 
-        # Generate scatter plot of centroid data
-        s = ax.scatter(x = Xc, y = Yc, c=np.linspace(0,1,len(color)), cmap='Spectral')
+        data_index = 0
+        for data in self.data:
+            
+            # Grab centroid X and Y coordinates
+            Xc = self.data[data_index]["Xc"]
+            Yc = self.data[data_index]["Yc"]
+
+            # Set scatter plot color based on element index
+            color = self.data[data_index].index
+
+            # Generate scatter plot of centroid data
+            s = ax.scatter(x = Xc, y = Yc, c=np.linspace(0,1,len(color)), cmap='Spectral')
        
+            # Keeps track of number of data sets plotted
+            data_index += 1
+
         # Set default labels
         ax.set_title('Beam Centroid')
         ax.set_xlabel('$X_{c}$ $[\mu m]$')
