@@ -28,7 +28,7 @@ class DataRay(Camera):
         for file_path in self.current_file_path:
 
             try:
-                df = pd.read_excel(self.current_file_path)
+                df = pd.read_excel(file_path)
             except:
                 print('FilePathError: invalid file path')
                 self.log.append('FilePathError: invalid file path')
@@ -38,6 +38,7 @@ class DataRay(Camera):
             self.data += [df]
 
     
+
     def Normalize_By_Radius(self, Xr, Yr):
         """Normalize centroid measurement by the beam radius"""
 
