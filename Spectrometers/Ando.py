@@ -39,7 +39,7 @@ class Ando(Spectrometer):
                 print('FilePathError: invalid file path')
                 self.log.append('FilePathError: invalid file path')
 
-            df.drop(index = range(len(df) - 18, len(df)), inplace = True)
+            df.drop(index = range(len(df) - 19, len(df)), inplace = True) # This drops all of the string information at the end of the file. Not sure if it is the same for every spectrometer setting.
             df = df.apply(pd.to_numeric, axis = 1)
 
             # Add this data set to the rest of the data
