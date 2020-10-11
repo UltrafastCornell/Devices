@@ -17,71 +17,87 @@ class OceanOptics(Spectrometer):
 
 
     def __init__(self):
-        # Initialize PowerMeter base class
+        # Initialize Spectrometer base class
         Spectrometer.__init__(self)
 
 
-        # Override Device.Load_Data() method
+
+
+    ### New code taken and editted from Ando spectrometer class
     def Load_Data(self, file_path = []):
-        """Load centroid measurement as a Pandas data frame saved in centroid"""
+        """Load spectrum as a Pandas data frame"""
+
         # Run parent method
         Device.Load_Data(self, file_path)
         
+        caps_per_file = []
         for file_path in self.current_file_path:
-            
-            # Create empty array to hold text data read by csv reader
-            txt_data = [];
-
             try:
-                # Open file and read desired data. Append to txt_data array
-                with open(file_path, 'r') as file:
-                    
-                    # Using csv reader, read in items in a row that do not include '', 'NA', and 'Hint'
-                    myReader = csv.reader(file, delimiter='\t')
-                    for row in myReader:
-                        clean_row = []
-                        for item in row:
-                            if (not item == '' and not item == 'NA' and not item == 'Hint'):
-                                clean_row.append(item);
-                        txt_data.append(clean_row);
-                    file.close()
-
+                with open(file_path) as f:
+                    first_line = f.readline()
+                capture_names = first_line.split(sep=None)
+                
+                num_captures = len(capture_names)
+                caps_per_file += [num_captures]
+                
+                name_list = []
+                for i in range(num_captures):
+                    name_list += ['Wavelength ' + str(i), 'Amplitude ' + str(i)]
+                
+                df = pd.read_csv(file_path, skiprows = 1, delimiter = '\t', names = name_list, index_col = False)
             except:
-                self.log.append(('FilePathError: ', file_path, ' is an invalid file path'))
-                return
-            
-            # Convert text data to dataframe
-            df = pd.DataFrame(data = txt_data[1:], columns = txt_data[0])
-
-            # Collect columns correspond to centroid measurments of In Coupling, Single Pass, and Double Pass camers
-            df_centroids = df[['Timestamp', '#1 MX [mm]', '#1 MY [mm]', '#2 MX [mm]', '#2 MY [mm]', '#4 MX [mm]', '#4 MY [mm]']]
-
-            # Convert strings to numerical data
-            df_numerical = df_centroids.drop('Timestamp', axis = 1).apply(lambda x: pd.to_numeric(x, errors='coerce'), axis = 1)
-
-            # Create a Time column that contains the time of each data point in seconds
-            Get_Time = lambda time: datetime.strptime(time, '%Y/%m/%d %H:%M:%S').timestamp()
-            time = [Get_Time(time) - Get_Time(df_centroids['Timestamp'][0]) for time in df_centroids['Timestamp']]
-            df_numerical['Time [s]'] = time
-
-            # Get date to use as label. To be appended to date_array
-            # df_numerical['Date'] = datetime.strptime(df_centroids['Timestamp'][0], '%Y/%m/%d %H:%M:%S').date();
-            df_numerical['Date'] = df_centroids['Timestamp'].apply(lambda t:datetime.strptime(t, '%Y/%m/%d %H:%M:%S').date());
-
-            # Define column names to use to rename data
-            col_names = ['Time', 'Xc', 'Yc', 'Date'];
-
-            # Rename column labels using specified column names. Add dataframe corresponding to each camera to a list.
-            cam_df_list = [];
-            cam_df_list.append(df_numerical[['Time [s]', '#1 MX [mm]', '#1 MY [mm]', 'Date']].rename(index = str, columns = {'Time [s]': col_names[0], '#1 MX [mm]': col_names[1], '#1 MY [mm]': col_names[2]}));
-            cam_df_list.append(df_numerical[['Time [s]', '#2 MX [mm]', '#2 MY [mm]', 'Date']].rename(index = str, columns = {'Time [s]': col_names[0], '#2 MX [mm]': col_names[1], '#2 MY [mm]': col_names[2]}));
-            cam_df_list.append(df_numerical[['Time [s]', '#4 MX [mm]', '#4 MY [mm]', 'Date']].rename(index = str, columns = {'Time [s]': col_names[0], '#4 MX [mm]': col_names[1], '#4 MY [mm]': col_names[2]}));
-
-            # Create a list of camera names to use as super labels.
-            cam_list = ['In Coupling', 'Single Pass', 'Double Pass'];
-
-            # Concate dataframes organized by cameras
-            df_total = pd.concat( cam_df_list, keys = cam_list, axis = 1 );
+                print('FilePathError: invalid file path')
+                self.log.append('FilePathError: invalid file path')
 
             # Add this data set to the rest of the data
-            self.data += [df_total]
+            self.data += [df]
+            self.caps_per_file = caps_per_file
+
+
+
+    def Plot_Spectrum(self, same_axis = True):
+        """Plot spectrum from Ocean Optics spectrometers. Plot all recorded files on different figure axis. Each file can have multiple captures which are plotted on the same axis."""
+        
+        # Check if data has been properly loaded
+        if not self._Is_Data_Loaded(self.data):
+            self.Load_Data()    
+
+        ###
+        # Create new figure
+        fig, ax = plt.subplots(nrows = len(self.data), ncols = 1, squeeze = False, figsize = (24, 6*len(self.data)))
+        
+        # Color maps for plotting different sets of data
+        color_list = ["blue", "green", "red", "purple", "orange"]
+        
+        data_index = 0
+        for data in self.data:
+
+            # Grab wavelength and amplitude from recorded data
+            for i in range(self.caps_per_file[data_index]):
+                wavelength = data["Wavelength " + str(i)]
+                amplitude = data["Amplitude " + str(i)]
+
+                # Plot linear spectrum (Not scaled by power scaling of spectrometers--this would be different for each spectrometer)
+                ax[data_index, 0].plot(wavelength, amplitude, c=color_list[i%len(color_list)], lw = 4, label = 'Capture # ' + str(i))
+            
+            ax[data_index, 0].legend(loc='upper right')
+            
+            # Set default labels
+            ax[data_index, 0].set_title('File #' + str(data_index + 1))
+            ax[data_index, 0].set_xlabel('Wavelength [nm]')
+            ax[data_index, 0].set_ylabel('Amplitude [A.U.]')
+            
+            # Keeps track of number of data sets plotted
+            data_index += 1
+
+        # Set default labels
+        # plt.legend(loc='upper right')
+        ax[0, 0].set_title('Ocean Optics Spectra')
+        ax[0, 0].set_xlabel('Wavelength [nm]')
+        ax[0, 0].set_ylabel('Amplitude [A.U.]')    
+        ###
+
+        plt.tight_layout()
+
+        return ax
+    

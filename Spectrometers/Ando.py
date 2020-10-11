@@ -14,7 +14,7 @@ import seaborn as sns
 
 class Ando(Spectrometer):
     #   Helper functions for formatting and plotting
-    #   data from Ocean Optics spectrometers
+    #   data from Ando spectrometer
     
 
 
@@ -81,9 +81,10 @@ class Ando(Spectrometer):
             wavelength = data["Wavelength"]
             amplitude = data["Amplitude"]
 
-            amplitude_linear = 10**(amplitude/10) / np.max(10**(amplitude/10))
-
-            # Generate scatter plot of centroid data
+            # amplitude_linear = 10**(amplitude/10) / np.max(10**(amplitude/10)) ## Convert amplitudes in dB to linear scale. Not necessary if amplitude is already in linear scale.
+            amplitude_linear = amplitude.copy()
+            
+            # Plot spectrum from data
             ax[0, 0].plot(wavelength, amplitude_linear, c=color_list[data_index%len(color_list)], lw = 4, label = 'File #' + str(data_index + 1))
             
             # Keeps track of number of data sets plotted
