@@ -78,7 +78,7 @@ class OceanOptics(Spectrometer):
                 amplitude = data["Amplitude " + str(i)]
 
                 # Plot linear spectrum (Not scaled by power scaling of spectrometers--this would be different for each spectrometer)
-                ax[data_index, 0].plot(wavelength, amplitude, c=color_list[i%len(color_list)], lw = 4, label = 'Capture # ' + str(i))
+                ax[data_index, 0].plot(wavelength, amplitude, c=color_list[i%len(color_list)], lw = 4, label = 'Capture #' + str(i))
             
             ax[data_index, 0].legend(loc='upper right')
             
@@ -91,8 +91,6 @@ class OceanOptics(Spectrometer):
             data_index += 1
 
         # Set default labels
-        # plt.legend(loc='upper right')
-        ax[0, 0].set_title('Ocean Optics Spectra')
         ax[0, 0].set_xlabel('Wavelength [nm]')
         ax[0, 0].set_ylabel('Amplitude [A.U.]')    
         ###
