@@ -64,11 +64,12 @@ class OceanOptics(Spectrometer):
 
         ###
         # Create new figure
-        fig, ax = plt.subplots(nrows = len(self.data), ncols = 1, squeeze = False, figsize = (24, 6*len(self.data)))
         
+        fig, ax = plt.subplots(nrows = len(self.data), ncols = 1, squeeze = False, figsize = (24, 6*len(self.data)))
+
         # Color maps for plotting different sets of data
         color_list = ["blue", "green", "red", "purple", "orange"]
-        
+
         data_index = 0
         for data in self.data:
 
@@ -97,5 +98,5 @@ class OceanOptics(Spectrometer):
 
         plt.tight_layout()
 
-        return ax
+        return fig, ax
     
