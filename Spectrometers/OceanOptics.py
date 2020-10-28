@@ -97,5 +97,5 @@ class OceanOptics(Spectrometer):
 
         plt.tight_layout()
 
-        return ax
+        return fig, ax
     
